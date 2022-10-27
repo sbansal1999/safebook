@@ -40,3 +40,7 @@
 textarea {
   resize: none;
 }
+
+.table-responsive{
+  max-height:350px;
+}
