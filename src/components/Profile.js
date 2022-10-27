@@ -1,5 +1,10 @@
 import React from "react";
+import NavLoggedIn from "./NavLoggedIn";
 
 export default function Profile() {
-  return <div>Profile Here</div>;
+  return (
+    <div>
+      <NavLoggedIn />
+    </div>
+  );
 }
