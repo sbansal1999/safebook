@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
+import NavLoggedIn from "./NavLoggedIn";
 
 export default function Profile() {
   const [pic, setPic] = useState(
@@ -16,29 +17,30 @@ export default function Profile() {
   ]);
   const [show, setShow] = useState(false);
   return (
-    
-      <div>
-        <Card style={{ width: "20rem" }}>
-          <Card.Img variant="top" src={pic} width="400" />
-          <Card.Body>
-            <Card.Title>{name}</Card.Title>
-            <Card.Text>
-              Age: {age} <br /> Friends: {friends.length}
-            </Card.Text>
-            <Button
-              variant="primary"
-              onClick={() => {
-                if (show == true) setShow(false);
-                else setShow(true);
-              }}
-            >
-              Show Friends
-            </Button>
-            <br />
-            <Button className="mt-3" variant="success">
-              Show Media
-            </Button>
-          </Card.Body>
-        </Card>
-    </div>);
+    <div>
+      <NavLoggedIn/>
+      <Card style={{ width: "20rem" }}>
+        <Card.Img variant="top" src={pic} width="400" />
+        <Card.Body>
+          <Card.Title>{name}</Card.Title>
+          <Card.Text>
+            Age: {age} <br /> Friends: {friends.length}
+          </Card.Text>
+          <Button
+            variant="primary"
+            onClick={() => {
+              if (show == true) setShow(false);
+              else setShow(true);
+            }}
+          >
+            Show Friends
+          </Button>
+          <br />
+          <Button className="mt-3" variant="success">
+            Show Media
+          </Button>
+        </Card.Body>
+      </Card>
+    </div>
+  );
 }
