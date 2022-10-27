@@ -40,7 +40,5 @@ export default function Profile() {
             </Button>
           </Card.Body>
         </Card>
-     
-    </div>
-  );
+    </div>);
 }
