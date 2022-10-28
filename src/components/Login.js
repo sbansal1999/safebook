@@ -13,7 +13,7 @@ export default function Login() {
           <Form.Label>Enter email address</Form.Label>
           <Form.Control
             type="email"
-            placeholder="Enter email"
+            placeholder="Enter e-mail"
             value={email}
             onChange={(e) => {
               console.log("IN");
@@ -35,11 +35,11 @@ export default function Login() {
           />
         </Form.Group>
       </Form>
-      <Button variant="danger" type="submit">
-        forget password
+      <Button variant="secondary">
+        Forgot Password
       </Button>
-      <Button variant="primary" type="submit">
-        Submit
+      <Button className="ms-2" variant="success">
+        Log In
       </Button>
     </div>
   );
