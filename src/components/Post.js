@@ -1,18 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import NavLoggedIn from "./NavLoggedIn";
 import EmojiPicker from "emoji-picker-react";
-import SplitButton from "react-bootstrap/SplitButton";
 import Button from "react-bootstrap/Button";
-import { Alert } from "react-bootstrap";
-
-import { XLg } from "react-bootstrap-icons";
+import { Modal } from "react-bootstrap";
 
 export default function Post() {
   const [postText, setPostText] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const [files, setFiles] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   const handleEmojiClick = (emojiData) => {
     setPostText(postText + emojiData.emoji);
@@ -26,9 +24,12 @@ export default function Post() {
     console.log(files.length);
   };
 
-  const handleAddMore = () => {
-    if (files.length == 5) {
-    }
+  const handlePost = () => {
+    setShowModal(true);
+  };
+
+  const handleConfirmPost = () => {
+    setShowModal(false);
   };
 
   return (
@@ -130,7 +131,11 @@ export default function Post() {
                       />
                     )}
                   </div>
-                  <Button className="mb-3" variant="primary">
+                  <Button
+                    className="mb-3"
+                    variant="primary"
+                    onClick={handlePost}
+                  >
                     Post
                   </Button>
                 </Form>
@@ -142,6 +147,32 @@ export default function Post() {
           {showPicker && <EmojiPicker onEmojiClick={handleEmojiClick} />}
         </div>
       </div>
+
+      <Modal
+        centered
+        show={showModal}
+        onHide={() => {
+          setShowModal(false);
+        }}
+      >
+        <Modal.Header>
+          <Modal.Title>Confirm Post</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Press YES to make the post. NO to cancel the post.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="danger"
+            onClick={() => {
+              setShowModal(false);
+            }}
+          >
+            No
+          </Button>
+          <Button onClick={handleConfirmPost}>Yes</Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
