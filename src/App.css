@@ -41,6 +41,10 @@ textarea {
   resize: none;
 }
 
-.table-responsive{
-  max-height:350px;
+.table-responsive {
+  max-height: 350px;
+}
+
+.huge {
+  font-size: 125px;
 }
