@@ -1,13 +1,14 @@
-import React,{useState} from 'react'
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import NavBar from "./NavBar";
 
 export default function Login() {
-  const [email,setEmail]=useState();
-  const [password,setPassword]=useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   return (
     <div>
-      Login
+      <NavBar />
       <Form>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Enter email address</Form.Label>
@@ -35,9 +36,7 @@ export default function Login() {
           />
         </Form.Group>
       </Form>
-      <Button variant="secondary">
-        Forgot Password
-      </Button>
+      <Button variant="secondary">Forgot Password</Button>
       <Button className="ms-2" variant="success">
         Log In
       </Button>
