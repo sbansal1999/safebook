@@ -4,19 +4,22 @@ import Form from "react-bootstrap/Form";
 import NavLoggedIn from "./NavLoggedIn";
 import EmojiPicker from "emoji-picker-react";
 import Button from "react-bootstrap/Button";
-import { Modal } from "react-bootstrap";
+import { Alert, Modal } from "react-bootstrap";
+
 
 export default function Post() {
   const [postText, setPostText] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const [files, setFiles] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [noContentAlert, setNoContentAlert] = useState(false);
 
   const handleEmojiClick = (emojiData) => {
     setPostText(postText + emojiData.emoji);
   };
 
   const handleFileAdd = (e) => {
+    setNoContentAlert(false);
     const temp = e.target.files;
     const filesArr = Array.prototype.slice.call(temp);
     setFiles((current) => [...current, filesArr]);
@@ -25,11 +28,14 @@ export default function Post() {
   };
 
   const handlePost = () => {
-    setShowModal(true);
+    if (postText === "" && files.length === 0) {
+      setNoContentAlert(true);
+    } else setShowModal(true);
   };
 
   const handleConfirmPost = () => {
     setShowModal(false);
+
   };
 
   return (
@@ -55,6 +61,7 @@ export default function Post() {
                       rows={8}
                       value={postText}
                       onChange={(e) => {
+                        if (e.target.value !== "") setNoContentAlert(false);
                         setPostText(e.target.value);
                         setShowPicker(false);
                       }}
@@ -141,6 +148,12 @@ export default function Post() {
                 </Form>
               </div>
             </Card>
+
+            {noContentAlert && (
+              <Alert className="mt-3" variant="danger">
+                The post has no content. Please add some content and try again.
+              </Alert>
+            )}
           </div>
         </div>
         <div style={{ width: "500px" }}>
