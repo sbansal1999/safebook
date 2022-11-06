@@ -9,6 +9,7 @@ import Profile from "./components/Profile";
 import Register from "./components/Register";
 
 function App() {
+  
   return (
     <div className="App">
       <BrowserRouter>

@@ -18,12 +18,11 @@ export default function HomePage() {
           <h1 className="huge">F</h1>
           <h1 className="huge">E</h1>
         </div>
-        <div
-          className="d-flex justify-content-center"
-          style={{ width: "70vw" }}
-        >
-          <br />
-          <img src={background_image} style={{ width: "80%" }} />
+        <div className="d-flex justify-content-center">
+          <img
+            src={background_image}
+            style={{ height: "70vh", width: "50vw" }}
+          />
         </div>
         <div
           className="d-flex flex-column align-items-start"
