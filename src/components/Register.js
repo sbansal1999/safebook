@@ -1,18 +1,80 @@
 import React, { useState } from "react";
-
+import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import NavBar from "./NavBar";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import validator from "validator";
+import { differenceInMonths } from "date-fns";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./firebase-config";
 
 export default function Register() {
-  const [fName, setFName] = useState();
-  const [lName, setLName] = useState();
-  const [email, setEmail] = useState();
-  const [DOB, setDOB] = useState();
-  const [password, setPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
+  const [fName, setFName] = useState("");
+  const [lName, setLName] = useState("");
+  const [email, setEmail] = useState("");
+  const [DOB, setDOB] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [alertMessage, setAlert] = useState("");
+  const [onRegister, setOnRegister] = useState(false);
+  const [alertVariant, setalertVariant] = useState("danger");
+
+  const setAlertDanger = (msg)=>{
+    setalertVariant("danger");
+    setAlert(msg);
+  }
+
+  const validateUser = () => {
+    var dob = new Date(DOB);
+    var dnow = new Date(Date.now());
+    const diffm = differenceInMonths(dnow, dob);
+    if (!fName.trim()) setAlertDanger("First Name cannot be empty.");
+    else if (!lName.trim()) setAlertDanger("Last Name cannot be empty.");
+    else if (!email.trim()) setAlertDanger("E-Mail cannot be empty.");
+    else if (!validator.isEmail(email))
+      setAlertDanger("Please enter valid e-mail address");
+    else if (!DOB.trim()) setAlertDanger("Date of Birth cannot be empty.");
+    else if (diffm < 120) setAlertDanger("Age cannot be less than 10 years");
+    else if (diffm > 192) setAlertDanger("Age cannot be more than 16 years");
+    else if (!password.trim()) setAlertDanger("Password cannot be empty.");
+    else if (!validator.isStrongPassword(password))
+      setAlertDanger("Please enter valid password");
+    else if (!confirmPassword.trim())
+      setAlertDanger("Confirm Password cannot be empty.");
+    else if (confirmPassword !== password) setAlertDanger("Passwords must be same");
+    else {
+      setAlert("");
+      return 1;
+    }
+    return 0;
+  };
+
+  const handleRegister = async () => {
+    if (validateUser()) {
+      try {
+        setalertVariant("success");
+        setAlert("Registering user......");
+        const user = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        setAlert("User successfully registered.");
+        console.log(user);
+      } catch (error) {
+        console.log(error.code);
+        if (error.code === "auth/email-already-in-use") {
+          setalertVariant("danger");
+          setAlert("Email address is already registered.");
+        } else {
+          setAlert("Something went wrong.");
+        }
+      }
+    }
+  };
+
   return (
     <div>
       <NavBar />
@@ -20,7 +82,12 @@ export default function Register() {
         className="d-flex justify-content-center mt-5"
         style={{ width: "100%" }}
       >
-        <Form className="border p-5 rounded">
+        <Form
+          className="border p-5 rounded"
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
           <h3>Register</h3>
           <Form.Group className="mb-3" as={Row}>
             <Form.Label column sm={2}>
@@ -93,7 +160,16 @@ export default function Register() {
               }}
             />
           </Form.Group>
-          <Button type="submit">Register</Button>
+          <Button type="submit" onClick={handleRegister}>
+            Register
+          </Button>
+
+          <br />
+          {alertMessage && (
+            <Alert variant={alertVariant} className="mt-2">
+              {alertMessage}
+            </Alert>
+          )}
         </Form>
       </div>
     </div>
