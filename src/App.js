@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "./App.css";
+import "./App.scss";
 import ChatHome from "./components/Chathome";
 import Feed from "./components/Feed";
 import HomePage from "./components/HomePage";
