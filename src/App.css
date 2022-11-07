@@ -48,3 +48,83 @@ textarea {
 .huge {
   font-size: 600%;
 }
+
+.home {
+  background-color: #a7bcff;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  border: 1px solid white;
+  border-radius: 10px;
+  width: 70%;
+  height: 80%;
+  display: flex;
+  overflow: hidden;
+}
+.sidebar {
+  flex: 1;
+  border-right: 1px solid #3e3c61;
+  background-color: #3e3c61;
+}
+.chatnavbar {
+  display: flex;
+  align-items: center;
+  background-color: #2f2d52;
+  height: 50px;
+  padding: 10px;
+  justify-content: space-between;
+  color: #ddddf7;
+}
+.search {
+  border-bottom: 1px solid gray;
+}
+.searchform {
+  padding: 10px;
+}
+.inputform {
+  background-color: transparent;
+  border: none;
+  color: #3fb821;
+}
+
+.userchat {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.userimg {
+  width: 50px;
+  height: 50 px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.userchatinfo{
+   
+}
+ span{font-size: 18px;font-weight:}
+
+.logo {
+  font-weight: bold;
+}
+.user {
+  display: flex;
+  gap: 10px;
+}
+.img {
+  background-color: #ddddf7;
+  height: 19px;
+  width: 19px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.chat {
+  flex: 2;
+}
