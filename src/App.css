@@ -48,3 +48,7 @@ textarea {
 .huge {
   font-size: 600%;
 }
+
+.full-w {
+  width: 100%;
+}

@@ -4,8 +4,22 @@ import Form from "react-bootstrap/Form";
 import NavLoggedIn from "./NavLoggedIn";
 import EmojiPicker from "emoji-picker-react";
 import Button from "react-bootstrap/Button";
-import { Alert, Modal } from "react-bootstrap";
+import { Alert, Modal, ModalBody, Spinner } from "react-bootstrap";
 
+import { FcCheckmark } from "react-icons/fc";
+
+import { storage, db } from "./firebase-config";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {
+  collection,
+  doc,
+  addDoc,
+  updateDoc,
+  arrayUnion,
+  setDoc,
+} from "firebase/firestore";
+
+const toxicity = require("@tensorflow-models/toxicity");
 
 export default function Post() {
   const [postText, setPostText] = useState("");
@@ -13,6 +27,13 @@ export default function Post() {
   const [files, setFiles] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [noContentAlert, setNoContentAlert] = useState(false);
+  const [uid, setUid] = useState("dummy_id");
+  const [postResponse, setPostResponse] = useState();
+  const [showStatus, setShowStatus] = useState(false);
+  const [showToxicWarning, setShowToxicWarning] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const postCollectionRef = collection(db, `posts`, uid, `posts`);
 
   const handleEmojiClick = (emojiData) => {
     setPostText(postText + emojiData.emoji);
@@ -33,9 +54,66 @@ export default function Post() {
     } else setShowModal(true);
   };
 
-  const handleConfirmPost = () => {
-    setShowModal(false);
+  const uploadFiles = async (id) => {
+    const newRef = doc(db, "posts", uid, "posts", id);
+    console.log(id);
+    await files.map((file) => {
+      const storageRef = ref(storage, `/post/media/${uid}/${file[0].name}`);
+      uploadBytes(storageRef, file[0]).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then(async (url) => {
+          await updateDoc(newRef, { images: arrayUnion(url) });
+        });
+      });
+    });
+  };
 
+  const isTextToxic = async () => {
+    const threshold = 0.5;
+    var isToxic = false;
+    const model = await toxicity.load(threshold);
+    const sentences = [postText];
+    const predictions = await model.classify(sentences);
+    await predictions.map((res) => {
+      if (res.results[0].match === true) {
+        isToxic = true;
+      }
+    });
+    if (isToxic === true) {
+      setPostResponse(true);
+      setShowToxicWarning(true);
+      return true;
+    } else return false;
+  };
+
+  const isImageToxic = () => {
+    return false;
+  };
+
+  const createPost = async () => {
+    console.log(await isTextToxic());
+    if ((await isTextToxic()) === false) {
+      if (isImageToxic() === false) {
+        // now it is safe to post do it.
+        console.log("in");
+        setShowStatus(false);
+        const res = await addDoc(postCollectionRef, {
+          timestamp: Date.now(),
+          postText: postText,
+          likes: 0,
+          imageCount: files.length,
+          images: [],
+        });
+        uploadFiles(res._key.path.segments[3]);
+        setShowSuccess(true);
+      }
+    }
+  };
+
+  const handleConfirmPost = () => {
+    setPostResponse(false);
+    setShowModal(false);
+    setShowStatus(true);
+    createPost();
   };
 
   return (
@@ -184,6 +262,68 @@ export default function Post() {
             No
           </Button>
           <Button onClick={handleConfirmPost}>Yes</Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal centered show={showStatus}>
+        <Modal.Header>
+          <Modal.Title>Posting !!!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="d-flex flex-column justify-content-center full-w">
+            {!postResponse && (
+              <div>
+                <div className="d-flex justify-content-center">
+                  <p>Your post is being uploaded.</p>
+                </div>
+                <div className="d-flex justify-content-center">
+                  <Spinner animation="border" variant="primary" />
+                </div>
+              </div>
+            )}
+            {showToxicWarning && (
+              <Alert variant="danger">
+                The post had content which is against our policies. Hence it
+                won't be posted.
+              </Alert>
+            )}
+          </div>
+        </Modal.Body>
+        {showToxicWarning && (
+          <Modal.Footer>
+            <Button
+              variant="danger"
+              onClick={() => {
+                setShowStatus(false);
+                setPostResponse(true);
+                setShowToxicWarning(false);
+              }}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        )}
+      </Modal>
+
+      <Modal show={showSuccess} centered animation={false}>
+        <Modal.Body>
+          <div className="d-flex justify-content-center">
+            <h1>Successfully Posted !!!</h1>
+          </div>
+          <div className="d-flex justify-content-center">
+            <h1>
+              <FcCheckmark />
+            </h1>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={() => {
+              setShowSuccess(false);
+            }}
+          >
+            Close
+          </Button>
         </Modal.Footer>
       </Modal>
     </>
