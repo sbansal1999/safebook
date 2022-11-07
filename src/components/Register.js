@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -8,7 +8,8 @@ import Row from "react-bootstrap/Row";
 import validator from "validator";
 import { differenceInMonths } from "date-fns";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebase-config";
+import { db, auth } from "./firebase-config";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 
 export default function Register() {
   const [fName, setFName] = useState("");
@@ -20,12 +21,13 @@ export default function Register() {
   const [alertMessage, setAlert] = useState("");
   const [onRegister, setOnRegister] = useState(false);
   const [alertVariant, setalertVariant] = useState("danger");
-
-  const setAlertDanger = (msg)=>{
+  const [users, setUsers] = useState([]);
+  const usersCollectionRef = collection(db, "users");
+  const setAlertDanger = (msg) => {
     setalertVariant("danger");
     setAlert(msg);
-  }
-
+  };
+ 
   const validateUser = () => {
     var dob = new Date(DOB);
     var dnow = new Date(Date.now());
@@ -43,7 +45,8 @@ export default function Register() {
       setAlertDanger("Please enter valid password");
     else if (!confirmPassword.trim())
       setAlertDanger("Confirm Password cannot be empty.");
-    else if (confirmPassword !== password) setAlertDanger("Passwords must be same");
+    else if (confirmPassword !== password)
+      setAlertDanger("Passwords must be same");
     else {
       setAlert("");
       return 1;
@@ -62,6 +65,7 @@ export default function Register() {
           password
         );
         setAlert("User successfully registered.");
+        createUser();
         console.log(user);
       } catch (error) {
         console.log(error.code);
@@ -73,6 +77,15 @@ export default function Register() {
         }
       }
     }
+  };
+
+  const createUser = async () => {
+    await addDoc(usersCollectionRef, {
+      fname: fName,
+      lname: lName,
+      email: email,
+      dob: DOB,
+    });
   };
 
   return (
