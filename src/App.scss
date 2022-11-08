@@ -49,6 +49,27 @@ textarea {
   font-size: 600%;
 }
 
+.tiny {
+  font-size: 65%;
+}
+
+.full-width {
+  width: 100% !important;
+}
+
+.side-bar-border {
+  border-right: 3px solid teal;
+}
+
+.no-css {
+  color: white;
+  text-decoration: none;
+}
+
+.no-css:hover {
+  color: white;
+}
+
 .home {
   background-color: #a7bcff;
   height: 100vh;
@@ -211,4 +232,15 @@ textarea {
       }
     }
   }
+}
+
+.sidenav {
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  width: 23vw;
+  margin-top: 10vh;
+}
+
+.nav-fix {
+  margin-top: 10vh;
 }

@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import NavBar from "./NavBar";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import validator from "validator";
 import { differenceInMonths } from "date-fns";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { db, auth } from "./firebase-config";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function Register() {
   const [fName, setFName] = useState("");
@@ -22,12 +20,11 @@ export default function Register() {
   const [onRegister, setOnRegister] = useState(false);
   const [alertVariant, setalertVariant] = useState("danger");
   const [users, setUsers] = useState([]);
-  const usersCollectionRef = collection(db, "users");
   const setAlertDanger = (msg) => {
     setalertVariant("danger");
     setAlert(msg);
   };
- 
+
   const validateUser = () => {
     var dob = new Date(DOB);
     var dnow = new Date(Date.now());
@@ -59,14 +56,13 @@ export default function Register() {
       try {
         setalertVariant("success");
         setAlert("Registering user......");
-        const user = await createUserWithEmailAndPassword(
+        const userCredential = await createUserWithEmailAndPassword(
           auth,
           email,
           password
         );
         setAlert("User successfully registered.");
-        createUser();
-        console.log(user);
+        createUser(userCredential.user.uid);
       } catch (error) {
         console.log(error.code);
         if (error.code === "auth/email-already-in-use") {
@@ -79,8 +75,10 @@ export default function Register() {
     }
   };
 
-  const createUser = async () => {
-    await addDoc(usersCollectionRef, {
+  const createUser = async (uid) => {
+    const usersCollectionRef = doc(db, "users", uid);
+
+    await setDoc(usersCollectionRef, {
       fname: fName,
       lname: lName,
       email: email,
@@ -102,20 +100,16 @@ export default function Register() {
           }}
         >
           <h3>Register</h3>
-          <Form.Group className="mb-3" as={Row}>
-            <Form.Label column sm={2}>
-              First Name
-            </Form.Label>
-            <Col sm={10}>
-              <Form.Control
-                type="text"
-                placeholder="Enter First Name"
-                value={fName}
-                onChange={(e) => {
-                  setFName(e.target.value);
-                }}
-              />
-            </Col>
+          <Form.Group className="mb-3 mt-3">
+            <Form.Label>First Name </Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter First Name"
+              value={fName}
+              onChange={(e) => {
+                setFName(e.target.value);
+              }}
+            />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Last Name </Form.Label>

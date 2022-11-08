@@ -15,17 +15,26 @@ function NavBar() {
 
   return (
     <div>
-      <Navbar collapseOnSelect bg="success">
+      <Navbar
+        collapseOnSelect
+        variant="dark"
+        bg="dark"
+        style={{ height: "10vh" }}
+      >
         <Container>
-          <Navbar.Brand href="\">Safe Book</Navbar.Brand>
+          <Navbar.Brand href="\">
+            <h1>Safe Book</h1>
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
 
           <Navbar.Collapse className="justify-content-end">
-            <Nav.Link className="me-3" href="\Register">
-              Sign Up
-            </Nav.Link>
+            <Nav>
+              <Nav.Link className="me-3" href="\register">
+                Sign Up
+              </Nav.Link>
 
-            <Nav.Link href="\login">Log In</Nav.Link>
+              <Nav.Link href="\login">Log In</Nav.Link>
+            </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
