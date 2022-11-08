@@ -1,20 +1,7 @@
-import {
-  addDoc,
-  arrayUnion,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { Alert, Button, Card, Image, Modal } from "react-bootstrap";
-import FeedContent from "./FeedContent";
+import { Button, Card, Image } from "react-bootstrap";
 import { db } from "./firebase-config";
-import NavLoggedIn from "./NavLoggedIn";
-import SideNavBar from "./SideNavBar";
 
 import profile_image from "./../images/profile.jpg";
 import { useCookies } from "react-cookie";
