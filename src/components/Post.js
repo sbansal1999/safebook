@@ -45,8 +45,6 @@ export default function Post() {
     const temp = e.target.files;
     const filesArr = Array.prototype.slice.call(temp);
     setFiles((current) => [...current, filesArr]);
-
-    console.log(files.length);
   };
 
   const handlePost = () => {
@@ -57,7 +55,6 @@ export default function Post() {
 
   const uploadFiles = async (id) => {
     const newRef = doc(db, "posts", cookies.userId, "posts", id);
-    console.log(id);
     await files.map((file) => {
       const storageRef = ref(storage, `/post/media/${uid}/${file[0].name}`);
       uploadBytes(storageRef, file[0]).then((snapshot) => {
@@ -91,11 +88,9 @@ export default function Post() {
   };
 
   const createPost = async () => {
-    console.log(await isTextToxic());
     if ((await isTextToxic()) === false) {
       if (isImageToxic() === false) {
         // now it is safe to post do it.
-        console.log("in");
         setShowStatus(false);
         const postCollectionRef = collection(
           db,

@@ -8,6 +8,7 @@ import Login from "./components/Login";
 import Post from "./components/Post";
 import Profile from "./components/Profile";
 import Register from "./components/Register";
+import SearchResult from "./components/SearchResult";
 import ShowMedia from "./components/ShowMedia";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/showmedia" element={<ShowMedia />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/search/:query" element={<SearchResult />} />
         </Routes>
       </BrowserRouter>
     </div>

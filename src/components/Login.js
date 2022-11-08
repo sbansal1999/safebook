@@ -29,15 +29,12 @@ export default function Login() {
         const user = userCredential.user;
         setalertVariant("success");
         setAlert("User successfully logged in.");
-        console.log(user);
         setCookie("userId", user.uid, { maxAge: 3000000 });
         navigate(`/feed`);
       })
       .catch((error) => {
         const errorCode = error.code;
-        const errorMessage = error.message;
         setAlertDanger("Invalid Credentials.");
-        console.log(errorCode);
       });
   };
 

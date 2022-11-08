@@ -34,7 +34,6 @@ function ProfileSideBar() {
     const diff = differenceInYears(Date.now(), parseISO(data.data().dob));
     setAge(diff);
 
-    console.log(data.data().friends.length);
     setFriends(data.data().friends);
   };
 
