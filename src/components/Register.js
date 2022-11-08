@@ -83,6 +83,7 @@ export default function Register() {
       lname: lName,
       email: email,
       dob: DOB,
+      friends: [],
     });
   };
 

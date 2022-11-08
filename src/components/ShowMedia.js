@@ -6,16 +6,9 @@ import SideNavBar from "./SideNavBar";
 import { useCookies } from "react-cookie";
 import FeedContent from "./FeedContent";
 import ProfileSideBar from "./ProfileSideBar";
+import DisplayMedia from "./DisplayMedia";
 
-export default function Profile() {
-  const [profilePicture, setProfilePicture] = useState(profile_image);
-  const [userName, setUserName] = useState("");
-  const [age, setAge] = useState();
-  const [friends, setFriends] = useState([]);
-  const [show, setShow] = useState(false);
-
-  const [cookies, setCookie, removeCookie] = useCookies(["userId"]);
-
+function ShowMedia() {
   return (
     <div>
       <NavLoggedIn />
@@ -27,12 +20,17 @@ export default function Profile() {
           <SideNavBar />
         </div>
         <div style={{ width: "50vw" }} className="p-3 side-bar-border">
-          <FeedContent />
+          <DisplayMedia />
         </div>
-        <div style={{ width: "25vw" }} className="d-flex justify-content-center">
+        <div
+          style={{ width: "25vw" }}
+          className="d-flex justify-content-center"
+        >
           <ProfileSideBar />
         </div>
       </div>
     </div>
   );
 }
+
+export default ShowMedia;

@@ -7,7 +7,7 @@ import { collection, getDoc, doc } from "firebase/firestore";
 import profile_image from "./../images/profile.jpg";
 import { format } from "date-fns";
 
-import { FcLike } from "react-icons/fc";
+import { FcComments, FcDislike, FcLike } from "react-icons/fc";
 
 export default function PostContent({ props }) {
   const userDocRef = doc(db, "users", props.uid);
@@ -25,7 +25,6 @@ export default function PostContent({ props }) {
 
   useEffect(() => {
     getUserName();
-    console.log(props.images);
   }, []);
 
   return (
@@ -54,10 +53,15 @@ export default function PostContent({ props }) {
             style={{ gap: "2%" }}
           >
             <div>
-              <Image rouneded src={images[0]} style={{ maxWidth: "100%" }} />
+              <Image
+                rounded
+                src={images[0]}
+                style={{ maxWidth: "100%" }}
+                className="border"
+              />
             </div>
             <div>
-              <Image rouneded src={images[1]} style={{ maxWidth: "100%" }} />
+              <Image rounded src={images[1]} style={{ maxWidth: "100%" }} />
             </div>
           </div>
           <div
@@ -65,24 +69,32 @@ export default function PostContent({ props }) {
             style={{ gap: "2%" }}
           >
             <div>
-              <Image rouneded src={images[2]} style={{ maxWidth: "100%" }} />
+              <Image rounded src={images[2]} style={{ maxWidth: "100%" }} />
             </div>
             <div>
-              <Image rouneded src={images[3]} style={{ maxWidth: "100%" }} />
+              <Image rounded src={images[3]} style={{ maxWidth: "100%" }} />
             </div>
           </div>
           <div className="d-flex justify-content-around " style={{ gap: "2%" }}>
             <div>
-              <Image rouneded src={images[4]} style={{ maxWidth: "100%" }} />
+              <Image rounded src={images[4]} style={{ maxWidth: "100%" }} />
             </div>
           </div>
         </Card.Body>
         <Card.Footer>
-          <div className="d-flex justify-content-center ">
+          <div className="d-flex justify-content-around">
             <Button variant="outline-danger">
               <FcLike />
               Like
             </Button>
+            <Button variant="outline-dark">
+              <FcDislike />
+              Dislike
+            </Button>
+            {/* <Button variant="outline-primary">
+              <FcComments />
+              Comment
+            </Button> */}
           </div>
         </Card.Footer>
       </Card>

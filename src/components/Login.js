@@ -81,7 +81,13 @@ export default function Login() {
           <Button variant="success" onClick={handleSignin}>
             Log In
           </Button>
-          <Button className="ms-2" variant="secondary">
+          <Button
+            className="ms-2"
+            variant="secondary"
+            onClick={() => {
+              navigate("/forgotpassword");
+            }}
+          >
             Forgot Password
           </Button>
         </Form>

@@ -22,7 +22,6 @@ export default function FeedContent() {
       const data = await getDocs(
         query(postsCollectionRef, orderBy("timestamp", "desc"), limit(20))
       );
-      console.log(data.docs.length);
       if (data.docs.length === 0) {
         setNoPosts(true);
       } else {
@@ -40,10 +39,7 @@ export default function FeedContent() {
   return (
     <div style={{ marginTop: "10vh" }}>
       {noPosts ? (
-        <div
-          className="d-flex align-items-center justify-content-center nav-fix"
-          
-        >
+        <div className="d-flex align-items-center justify-content-center nav-fix">
           <Alert>
             Nothing to show here. Head over to {"  "}
             <Alert.Link href="/post">Create Post</Alert.Link> to get started.

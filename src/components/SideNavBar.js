@@ -1,22 +1,42 @@
-import React from "react";
-import { Button, Card, Image, Nav } from "react-bootstrap";
-import background_image from "../images/background.jpg";
+import { doc, getDoc } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { Button, Card, Image } from "react-bootstrap";
+import { useCookies } from "react-cookie";
 
-import { FaUserFriends } from "react-icons/fa";
+import { db } from "./firebase-config";
+
 import { Link, useNavigate } from "react-router-dom";
+
+import profile_image from "./../images/profile.jpg";
 
 function SideNavBar() {
   const navigate = useNavigate();
+  const [userName, setUserName] = useState("");
+
+  const [cookies, setCookie, removeCookie] = useCookies(["userId"]);
+
+  useEffect(() => {
+    const fetchName = async () => {
+      const userDocRef = doc(db, "users", cookies.userId);
+
+      const data = await getDoc(userDocRef);
+      const fname = data.data().fname;
+      const lname = data.data().lname;
+      setUserName(fname + " " + lname);
+    };
+
+    fetchName();
+  }, []);
 
   return (
-    <div className="m-3">
+    <div className="m-3" style={{ height: "100vh" }}>
       <div className="sidenav">
         <Card className="m-3">
           <Card.Body>
             <div className="d-flex align-items-center">
-              <Image rounded src={background_image} style={{ width: "20%" }} />
+              <Image rounded src={profile_image} style={{ width: "20%" }} />
               <div className="d-flex" style={{ marginLeft: "5%" }}>
-                <Card.Title>Name Will Come Here</Card.Title>
+                <Card.Title>{userName}</Card.Title>
               </div>
             </div>
           </Card.Body>
@@ -33,10 +53,10 @@ function SideNavBar() {
           </Button>
           <Button size="lg" className="mb-3" variant="primary">
             <Link
-              to="/profile"
+              to={window.location.pathname === "/feed" ? "/profile" : "/feed"}
               className="no-css d-flex full-width justify-content-center"
             >
-              Profile
+              {window.location.pathname === "/feed" ? "Profile" : "Feed"}
             </Link>
           </Button>
           <Button size="lg" className="mb-3" variant="primary">
