@@ -1,4 +1,5 @@
 import {
+  addDoc,
   arrayUnion,
   collection,
   doc,
@@ -24,18 +25,22 @@ export default function SearchCard({ props }) {
 
   const checkFriend = async () => {
     const currentUser = cookies.userId;
-    const dbRef = doc(db, "users", currentUser);
-    const data = await getDoc(dbRef);
+    const dbRef = collection(db, "users", currentUser, "friends");
+    const data = await getDocs(dbRef);
 
-    data.data().friends.map((fid) => {
-      if (fid === props.id) setIsFriend(true);
+    data.docs.map((doc) => {
+      if (doc.data().uid === props.id) setIsFriend(true);
     });
   };
 
   const handleAddFriend = async () => {
     const currentUser = cookies.userId;
-    const dbRef = doc(db, "users", currentUser);
-    await updateDoc(dbRef, { friends: arrayUnion(props.id) });
+    const dbRef = collection(db, "users", currentUser, "friends");
+    await addDoc(dbRef, {
+      uid: props.id,
+      fname: props.fname,
+      lname: props.lname,
+    });
     setIsFriend(true);
   };
 
