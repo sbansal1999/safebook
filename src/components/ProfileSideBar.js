@@ -3,16 +3,18 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
 import NavLoggedIn from "./NavLoggedIn";
-import { Table } from "react-bootstrap";
+import { Image, Table } from "react-bootstrap";
 
 import profile_image from "./../images/profile.jpg";
 import SideNavBar from "./SideNavBar";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { useCookies } from "react-cookie";
 import { db } from "./firebase-config";
 import { differenceInYears, parseISO } from "date-fns";
 import FeedContent from "./FeedContent";
 import { Link } from "react-router-dom";
+
+import { BsChatRightFill } from "react-icons/bs";
 
 function ProfileSideBar() {
   const [profilePicture, setProfilePicture] = useState(profile_image);
@@ -22,6 +24,15 @@ function ProfileSideBar() {
   const [show, setShow] = useState(false);
 
   const [cookies, setCookie, removeCookie] = useCookies(["userId"]);
+
+  const getFriends = async () => {
+    const dbRef = collection(db, "users", cookies.userId, "friends");
+    const newData = await getDocs(dbRef);
+
+    newData.docs.map((doc) => {
+      setFriends((prev) => [...prev, doc.data()]);
+    });
+  };
 
   const getUserData = async () => {
     const userDocRef = doc(db, "users", cookies.userId);
@@ -33,13 +44,17 @@ function ProfileSideBar() {
 
     const diff = differenceInYears(Date.now(), parseISO(data.data().dob));
     setAge(diff);
+  };
 
-    console.log(data.data().friends.length);
-    setFriends(data.data().friends);
+  const getUserName = async (uid) => {
+    const userDocRef = doc(db, "users", uid);
+    const data = await getDoc(userDocRef);
+    return data.data().fname + " " + data.data().fname;
   };
 
   useEffect(() => {
     getUserData();
+    getFriends();
   }, []);
 
   return (
@@ -90,26 +105,33 @@ function ProfileSideBar() {
         <Modal.Body className="show-grid">
           <Table responsive striped bordered hover className="mt-3">
             <tbody>
-              {friends.map((friend) => {
+              {friends.map((friend, id) => {
                 return (
                   <tr>
-                    <td>profile pic</td>
-
-                    <td>{friend}</td>
-
                     <td>
-                      <Button variant="primary" onClick={() => {}}>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="25"
-                          height="25"
-                          fill="currentColor"
-                          class="bi bi-chat-right"
-                          viewBox="0 0 16 16"
+                      <div
+                        className="d-flex align-items-center"
+                        style={{ height: "5vh" }}
+                      >
+                        <div style={{ width: "20%" }}>
+                          <Image
+                            rounded
+                            src={profile_image}
+                            style={{ width: "50%" }}
+                          />
+                        </div>
+                        <div style={{ width: "60%" }}>
+                          {friend.fname + " " + friend.lname}
+                        </div>
+                        <div
+                          className="d-flex justify-content-center"
+                          style={{ width: "20%" }}
                         >
-                          <path d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1H2zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z" />
-                        </svg>
-                      </Button>
+                          <Button variant="primary" onClick={() => {}}>
+                            <BsChatRightFill />
+                          </Button>
+                        </div>
+                      </div>
                     </td>
                   </tr>
                 );

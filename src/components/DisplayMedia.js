@@ -25,7 +25,6 @@ function DisplayMedia() {
       data.docs.map((doc) => {
         doc.data().images.map((image) => {
           setNoImages(false);
-          console.log(...imageLinks);
           setImageLinks((curr) => [...curr, image]);
         });
       });

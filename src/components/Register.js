@@ -64,7 +64,6 @@ export default function Register() {
         setAlert("User successfully registered.");
         createUser(userCredential.user.uid);
       } catch (error) {
-        console.log(error.code);
         if (error.code === "auth/email-already-in-use") {
           setalertVariant("danger");
           setAlert("Email address is already registered.");

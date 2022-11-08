@@ -6,13 +6,16 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 function NavLoggedIn() {
   const [search, setSearch] = useState("");
   const [cookies, setCookie, removeCookie] = useCookies(["userId"]);
+  const navigate = useNavigate();
 
   const handleSearch = () => {
     //handle search here
+    navigate(`/search/${search}`);
   };
 
   const handleLogout = () => {
@@ -48,7 +51,7 @@ function NavLoggedIn() {
                   setSearch(e.target.value);
                 }}
               />
-              <Button variant="dark" onClick={handleSearch}>
+              <Button variant="info" onClick={handleSearch}>
                 Search
               </Button>
             </Form>

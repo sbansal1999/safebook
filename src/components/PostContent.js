@@ -12,6 +12,8 @@ import { FcComments, FcDislike, FcLike } from "react-icons/fc";
 export default function PostContent({ props }) {
   const userDocRef = doc(db, "users", props.uid);
   const [userName, setUserName] = useState("");
+  const [isLiked, setIsLiked] = useState(false);
+  const [isDisliked, setIsDisliked] = useState(false);
 
   const postTime = format(new Date(props.timestamp), "dd/MM/yyyy hh:mm a");
   const images = props.images;
@@ -83,11 +85,23 @@ export default function PostContent({ props }) {
         </Card.Body>
         <Card.Footer>
           <div className="d-flex justify-content-around">
-            <Button variant="outline-danger">
+            <Button
+              variant={isLiked ? "danger" : "outline-danger"}
+              onClick={() => {
+                setIsLiked(!isLiked);
+                setIsDisliked(false);
+              }}
+            >
               <FcLike />
               Like
             </Button>
-            <Button variant="outline-dark">
+            <Button
+              variant={isDisliked ? "dark" : "outline-dark"}
+              onClick={() => {
+                setIsDisliked(!isDisliked);
+                setIsLiked(false);
+              }}
+            >
               <FcDislike />
               Dislike
             </Button>
