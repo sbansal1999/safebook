@@ -16,24 +16,25 @@ import {
   addDoc,
   updateDoc,
   arrayUnion,
-  setDoc,
 } from "firebase/firestore";
+
+import { useCookies } from "react-cookie";
 
 const toxicity = require("@tensorflow-models/toxicity");
 
 export default function Post() {
+  const [cookies, setCookie, removeCookie] = useCookies(["userId"]);
+
   const [postText, setPostText] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const [files, setFiles] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [noContentAlert, setNoContentAlert] = useState(false);
-  const [uid, setUid] = useState("dummy_id");
+  const [uid, setUid] = useState(cookies.userId);
   const [postResponse, setPostResponse] = useState();
   const [showStatus, setShowStatus] = useState(false);
   const [showToxicWarning, setShowToxicWarning] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-
-  const postCollectionRef = collection(db, `posts`, uid, `posts`);
 
   const handleEmojiClick = (emojiData) => {
     setPostText(postText + emojiData.emoji);
@@ -55,7 +56,7 @@ export default function Post() {
   };
 
   const uploadFiles = async (id) => {
-    const newRef = doc(db, "posts", uid, "posts", id);
+    const newRef = doc(db, "posts", cookies.userId, "posts", id);
     console.log(id);
     await files.map((file) => {
       const storageRef = ref(storage, `/post/media/${uid}/${file[0].name}`);
@@ -96,12 +97,20 @@ export default function Post() {
         // now it is safe to post do it.
         console.log("in");
         setShowStatus(false);
+        const postCollectionRef = collection(
+          db,
+          `posts`,
+          cookies.userId,
+          `posts`
+        );
+
         const res = await addDoc(postCollectionRef, {
           timestamp: Date.now(),
           postText: postText,
           likes: 0,
           imageCount: files.length,
           images: [],
+          uid: cookies.userId,
         });
         uploadFiles(res._key.path.segments[3]);
         setShowSuccess(true);
@@ -110,6 +119,7 @@ export default function Post() {
   };
 
   const handleConfirmPost = () => {
+    if (uid === "") setUid(cookies.userId);
     setPostResponse(false);
     setShowModal(false);
     setShowStatus(true);
@@ -119,7 +129,7 @@ export default function Post() {
   return (
     <>
       <NavLoggedIn />
-      <div className="d-flex">
+      <div className="d-flex nav-fix">
         <div
           className="d-flex justify-content-center w-100"
           style={{ marginLeft: "250px" }}

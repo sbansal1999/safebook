@@ -5,23 +5,37 @@ import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { useCookies } from "react-cookie";
 
 function NavLoggedIn() {
   const [search, setSearch] = useState("");
+  const [cookies, setCookie, removeCookie] = useCookies(["userId"]);
 
   const handleSearch = () => {
     //handle search here
   };
 
+  const handleLogout = () => {
+    removeCookie("userId");
+  };
+
   return (
     <div>
-      <Navbar collapseOnSelect bg="success">
+      <Navbar
+        fixed="top"
+        collapseOnSelect
+        variant="dark"
+        bg="dark"
+        style={{ height: "10vh" }}
+      >
         <Container>
-          <Navbar.Brand href="\">Safe Book</Navbar.Brand>
+          <Navbar.Brand href="\">
+            <h1>Safe Book</h1>
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="\">Home</Nav.Link>
+              <Nav.Link href="\feed">Home</Nav.Link>
             </Nav>
             <Form className="d-flex">
               <Form.Control
@@ -40,7 +54,9 @@ function NavLoggedIn() {
             </Form>
             <Nav>
               <Nav.Link href="\profile">Profile</Nav.Link>
-              <Nav.Link href="\logout">Logout</Nav.Link>
+              <Nav.Link href="\" onClick={handleLogout}>
+                Logout
+              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

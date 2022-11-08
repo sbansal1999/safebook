@@ -21,17 +21,16 @@ export default function Login() {
   };
   const navigate = useNavigate();
 
-  
-
   const handleSignin = () => {
-    console.log("sign in");
+    setalertVariant("info");
+    setAlert("Logging in...");
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         setalertVariant("success");
         setAlert("User successfully logged in.");
-        console.log(user.uid);
-        setCookie("userId",user.uid,{maxAge:3000000});
+        console.log(user);
+        setCookie("userId", user.uid, { maxAge: 3000000 });
         navigate(`/feed`);
       })
       .catch((error) => {
@@ -42,46 +41,58 @@ export default function Login() {
       });
   };
 
-  // const logOut = async()=> {
-  // await signOut(auth);
-  // };
   return (
     <div>
       <NavBar />
-      <Form>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Enter email address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter e-mail"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-          />
-        </Form.Group>
+      <div
+        className="d-flex justify-content-center mt-5"
+        style={{ width: "100%" }}
+      >
+        <Form
+          className="border rounded p-5"
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
+          <h3>Login</h3>
+          <Form.Group className="mb-3 mt-3" controlId="formBasicEmail">
+            <Form.Label>Enter E-Mail Address</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="E-Mail Address"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+          </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-        </Form.Group>
-      </Form>
-      <Button variant="secondary">Forgot Password</Button>
-      <Button className="ms-2" variant="success" onClick={handleSignin}>
-        Log In
-      </Button>
-      {alertMessage && (
-        <Alert variant={alertVariant} className="mt-2">
-          {alertMessage}
-        </Alert>
-      )}
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+          </Form.Group>
+          <Button variant="success" onClick={handleSignin}>
+            Log In
+          </Button>
+          <Button className="ms-2" variant="secondary">
+            Forgot Password
+          </Button>
+        </Form>
+      </div>
+      <div className="d-flex justify-content-center">
+        {alertMessage && (
+          <Alert variant={alertVariant} className="mt-2">
+            {alertMessage}
+          </Alert>
+        )}
+      </div>
     </div>
   );
 }
