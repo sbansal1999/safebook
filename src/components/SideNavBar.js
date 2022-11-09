@@ -15,12 +15,17 @@ import Modal from "react-bootstrap/Modal";
 import { BsChatRightFill } from "react-icons/bs";
 
 function SideNavBar() {
-  const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [friends, setFriends] = useState([]);
   const [show, setShow] = useState(false);
 
   const [cookies, setCookie, removeCookie] = useCookies(["userId"]);
+
+  const navigate = useNavigate();
+
+  const handleProfileClick = (id) => {
+    navigate(`/friend_profile/${id}`);
+  };
 
   const getFriends = async () => {
     const dbRef = collection(db, "users", cookies.userId, "friends");
@@ -123,7 +128,12 @@ function SideNavBar() {
                             style={{ width: "50%" }}
                           />
                         </div>
-                        <div style={{ width: "60%" }}>
+                        <div
+                          style={{ width: "60%" }}
+                          onClick={() => {
+                            handleProfileClick(friend.uid);
+                          }}
+                        >
                           {friend.fname + " " + friend.lname}
                         </div>
                         <div
