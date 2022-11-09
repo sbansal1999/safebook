@@ -69,6 +69,11 @@ export default function SearchCard({ props }) {
                 </Button>
               )}
             </div>
+            <div>
+              <Button onClick={() => {
+                
+              }}>Profile</Button>
+            </div>
           </div>
         </div>
       </Card.Title>
