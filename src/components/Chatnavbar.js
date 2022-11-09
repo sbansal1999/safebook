@@ -5,11 +5,12 @@ export default function Chatnavbar() {
     <div className="chatnavbar">
       <span className="logo">Safe Book</span>
       <div className="user">
-        <img className="img"
+        <img
+          className="img"
           src="https://i.pinimg.com/736x/64/5a/97/645a97899b437f047f4f88bee2e7755c.jpg"
           alt=""
         />
-        <span> tanya</span>
+        <span> Dummy User</span>
       </div>
     </div>
   );
