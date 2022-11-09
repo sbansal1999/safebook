@@ -63,6 +63,7 @@ export default function Post() {
         });
       });
     });
+    setShowSuccess(true);
   };
 
   const isTextToxic = async () => {
@@ -108,7 +109,6 @@ export default function Post() {
           uid: cookies.userId,
         });
         uploadFiles(res._key.path.segments[3]);
-        setShowSuccess(true);
       }
     }
   };

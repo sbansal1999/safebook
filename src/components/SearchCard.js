@@ -5,10 +5,17 @@ import { db } from "./firebase-config";
 
 import profile_image from "./../images/profile.jpg";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 export default function SearchCard({ props }) {
   const [cookies, setCookie, removeCookie] = useCookies(["userId"]);
   const [isFriend, setIsFriend] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    navigate(`/friend_profile/${props.id}`);
+  };
 
   const checkFriend = async () => {
     const currentUser = cookies.userId;
@@ -68,6 +75,15 @@ export default function SearchCard({ props }) {
                   Add Friend
                 </Button>
               )}
+            </div>
+            <div>
+              <Button
+                onClick={() => {
+                  handleProfileClick();
+                }}
+              >
+                Profile
+              </Button>
             </div>
           </div>
         </div>

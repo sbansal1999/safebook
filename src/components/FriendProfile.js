@@ -1,10 +1,10 @@
 import React from "react";
-import Sidebar from "../components/Sidebar";
-import Chat from "../components/Chat";
+import FeedContent from "./FeedContent";
+import FriendFeedContent from "./FriendFeedContent";
 import NavLoggedIn from "./NavLoggedIn";
 import SideNavBar from "./SideNavBar";
 
-const Home = () => {
+function FriendProfile() {
   return (
     <div>
       <NavLoggedIn />
@@ -15,16 +15,12 @@ const Home = () => {
         >
           <SideNavBar />
         </div>
-        <div style={{ width: "75vw" }} className="p-3 side-bar-border">
-          <div className="home mt-4">
-            <div className="container">
-              <Sidebar />
-              <Chat />
-            </div>
-          </div>
+        <div style={{ width: "50vw" }} className="p-3 side-bar-border nav-fix">
+          <FriendFeedContent props={window.location.pathname} />
         </div>
       </div>
     </div>
   );
-};
-export default Home;
+}
+
+export default FriendProfile;

@@ -3,6 +3,7 @@ import "./App.scss";
 import ChatHome from "./components/Chathome";
 import Feed from "./components/Feed";
 import ForgotPassword from "./components/ForgotPassword";
+import FriendProfile from "./components/FriendProfile";
 import HomePage from "./components/HomePage";
 import Login from "./components/Login";
 import Post from "./components/Post";
@@ -26,6 +27,7 @@ function App() {
           <Route path="/showmedia" element={<ShowMedia />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/search/:query" element={<SearchResult />} />
+          <Route path="/friend_profile/:id" element={<FriendProfile />} />
         </Routes>
       </BrowserRouter>
     </div>
